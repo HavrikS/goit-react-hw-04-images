@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Modal from 'components/Modal/Modal'
+import Searchbar from 'components/Searchbar/Searchbar';
 // import css from 'components/App.module.css'
 
 
@@ -7,6 +8,7 @@ import Modal from 'components/Modal/Modal'
 class App extends Component {
   
   state = {
+  searchName: '',
   showModal: false   
   }
 
@@ -25,6 +27,12 @@ class App extends Component {
   //     localStorage.setItem('contacts', JSON.stringify(contacts));
   //   }
   // }
+    formSubmitHendler = data => {  
+    const { searchName } = data;
+      
+    this.setState({
+        searchName: searchName
+    });}    
   
   // handleChangeFilter = event => {
   //   const { name, value } = event.target;
@@ -77,11 +85,11 @@ class App extends Component {
 
     return (
       <>
+        <Searchbar onSubmit={this.formSubmitHendler} />
         <button type='bytton' onClick={this.togleModal}></button>
         {showModal && <Modal onClose={this.togleModal} />}
-    </>
+      </>
     );
   }
 }
-
 export default App;
