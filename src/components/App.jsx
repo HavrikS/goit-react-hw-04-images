@@ -1,76 +1,50 @@
 import React, { Component } from 'react'
+import axios from "axios";
 import Modal from 'components/Modal/Modal'
 import Searchbar from 'components/Searchbar/Searchbar';
-// import css from 'components/App.module.css'
+import ImageGallery from 'components/ImageGallery/ImageGallery'
+import Button from 'components/Button/Button'
+
+import css from 'components/App.module.css'
 
 
 
 class App extends Component {
   
   state = {
+  pictures: [],
   searchName: '',
+  pageNumber: 1,
   showModal: false   
   }
 
-  //   componentDidMount() {
-  //   const contacts = localStorage.getItem('contacts');
-  //   const parsedContacts = JSON.parse(contacts);
-
-  //   if (parsedContacts) {
-  //     this.setState({ contacts: parsedContacts})
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   const {contacts} = this.state
-  //   if (contacts !== prevState.contacts) {
-  //     localStorage.setItem('contacts', JSON.stringify(contacts));
-  //   }
-  // }
-    formSubmitHendler = data => {  
-    const { searchName } = data;
+  async componentDidUpdate(prevProps, prevState) {    
+    const { searchName, pageNumber} = this.state
+    if (searchName !== prevState.searchName || pageNumber !== prevState.pageNumber) {
+    const response = await axios.get(`https://pixabay.com/api/?q=${searchName}&page=${pageNumber}&key=28062260-bbfec586ef8cfde1ee2834ccc&image_type=photo&orientation=horizontal&per_page=12`);
       
+      this.setState(prevState => ({
+        pictures: [...prevState.pictures, ...response.data.hits]
+    }))
+      }
+  }
+
+  onLoadMoreHendler = () => {
+    let page = this.state.pageNumber
     this.setState({
-        searchName: searchName
+      pageNumber: page += 1
+    });
+  }
+
+    formSubmitHendler = data => {  
+    const { searchName } = data;      
+      this.setState({
+      pictures: [],
+      searchName: searchName,
+      pageNumber: 1,
     });}    
   
-  // handleChangeFilter = event => {
-  //   const { name, value } = event.target;
-  //   this.setState({      
-  //     [name]: value
-  //   });
-  // }
-
-  // formSubmitHendler = data => {  
-  //   const { name, number } = data;
-  //   if (this.state.contacts.find(contact => contact.name === name)) {
-  //     alert(`${name} is alreadi in contacts.`);
-  //   } else
-  //   {const newContacts = {
-  //       id: nanoid(),
-  //       name: name,
-  //       number: number
-  //   };    
-  //   this.setState(prevState => ({
-  //       contacts: [newContacts, ...prevState.contacts]
-  //   }));}    
-  // }
-
-  // deleteContact = contactId => {
-  //   this.setState(prevState => ({
-  //     contacts: prevState.contacts.filter(contact => contact.id !== contactId)
-  //   }))
-  // }
-
-
-  // getVisibleContacts = () => {
-  //   const { filter, contacts } = this.state
-  //   const normalizedFilter = filter.toLowerCase();
-
-  //   return contacts.filter(contact => contact.name.toLowerCase()
-  //           .includes(normalizedFilter))
-  // }
-  
+   
   togleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
@@ -81,15 +55,19 @@ class App extends Component {
 
   render() {     
 
-    const {showModal} = this.state
-
+    const { showModal, pictures, } = this.state
+    
+    
+    
     return (
-      <>
-        <Searchbar onSubmit={this.formSubmitHendler} />
-        <button type='bytton' onClick={this.togleModal}></button>
+      <div className={css.Container}>
+        <Searchbar onSubmit={this.formSubmitHendler} />;
+        {(pictures.length > 0) && <ImageGallery pictures={pictures} onClick={this.togleModal} />};
+        {(pictures.length > 0) && <Button onClick={this.onLoadMoreHendler} />}
         {showModal && <Modal onClose={this.togleModal} />}
-      </>
-    );
+      </div>
+    );    
   }
 }
+
 export default App;

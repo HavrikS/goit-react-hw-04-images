@@ -17,9 +17,6 @@ handleChange = event => {
 handleSubmit = event => {
     event.preventDefault();    
     this.props.onSubmit(this.state)
-    this.setState({
-        searchName: '',        
-    });
 };
 
 

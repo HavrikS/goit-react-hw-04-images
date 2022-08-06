@@ -24,6 +24,10 @@ class Modal extends Component {
         }
     }
 
+    // handleImageClick = () => {
+        
+    // }
+
 
 
     render() {     
@@ -33,7 +37,7 @@ class Modal extends Component {
         return (      
         <div className={css.Overlay} onClick={this.handleBackdropClick}>
                 <div className={css.Modal}>
-                {/* <img src="" alt="" />     */}
+                <img src="" alt="" />    
             </div>
         </div>
         );
