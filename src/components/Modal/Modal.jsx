@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import css from 'components/Modal/Modal.module.css'
 
 
@@ -24,10 +25,6 @@ class Modal extends Component {
         }
     }
 
-    // handleImageClick = () => {
-        
-    // }
-
 
 
     render() {     
@@ -35,9 +32,9 @@ class Modal extends Component {
         
 
         return (      
-        <div className={css.Overlay} onClick={this.handleBackdropClick}>
-                <div className={css.Modal}>
-                <img src="" alt="" />    
+        <div className={css.overlay} onClick={this.handleBackdropClick}>
+                <div >
+                <img className={css.modal} src={this.props.largeImage} alt="" />    
             </div>
         </div>
         );
@@ -45,3 +42,9 @@ class Modal extends Component {
 }
 
 export default Modal;
+
+
+Modal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    largeImage: PropTypes.string.isRequired
+}

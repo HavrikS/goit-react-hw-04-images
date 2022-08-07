@@ -4,7 +4,7 @@ import Modal from 'components/Modal/Modal'
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery'
 import Button from 'components/Button/Button'
-
+import Loader from 'components/Loader/Loader'
 import css from 'components/App.module.css'
 
 
@@ -12,19 +12,22 @@ import css from 'components/App.module.css'
 class App extends Component {
   
   state = {
-  pictures: [],
-  searchName: '',
-  pageNumber: 1,
-  showModal: false   
+    pictures: [],
+    largeImage: '',
+    searchName: '',
+    pageNumber: 1,
+    showModal: false,
+    loading: false    
   }
+
 
   async componentDidUpdate(prevProps, prevState) {    
     const { searchName, pageNumber} = this.state
     if (searchName !== prevState.searchName || pageNumber !== prevState.pageNumber) {
-    const response = await axios.get(`https://pixabay.com/api/?q=${searchName}&page=${pageNumber}&key=28062260-bbfec586ef8cfde1ee2834ccc&image_type=photo&orientation=horizontal&per_page=12`);
-      
+    const response = await axios.get(`https://pixabay.com/api/?q=${searchName}&page=${pageNumber}&key=28062260-bbfec586ef8cfde1ee2834ccc&image_type=photo&orientation=horizontal&per_page=12`);      
       this.setState(prevState => ({
-        pictures: [...prevState.pictures, ...response.data.hits]
+        pictures: [...prevState.pictures, ...response.data.hits],
+        loading: false,
     }))
       }
   }
@@ -32,7 +35,14 @@ class App extends Component {
   onLoadMoreHendler = () => {
     let page = this.state.pageNumber
     this.setState({
-      pageNumber: page += 1
+      pageNumber: page += 1,
+      loading: true,
+    });
+  }
+
+  onImageHendler = (largeImageURL) => {    
+    this.setState({
+      largeImage: largeImageURL,
     });
   }
 
@@ -42,9 +52,10 @@ class App extends Component {
       pictures: [],
       searchName: searchName,
       pageNumber: 1,
+      loading: true,
     });}    
   
-   
+
   togleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
@@ -55,16 +66,17 @@ class App extends Component {
 
   render() {     
 
-    const { showModal, pictures, } = this.state
+    const { showModal, pictures, largeImage, loading} = this.state
     
     
     
     return (
-      <div className={css.Container}>
+      <div className={css.container}>
         <Searchbar onSubmit={this.formSubmitHendler} />;
-        {(pictures.length > 0) && <ImageGallery pictures={pictures} onClick={this.togleModal} />};
+        {loading && <Loader/>}
+        {(pictures.length > 0) && <ImageGallery pictures={pictures} onClick={this.togleModal} onImageClick={this.onImageHendler} />};
         {(pictures.length > 0) && <Button onClick={this.onLoadMoreHendler} />}
-        {showModal && <Modal onClose={this.togleModal} />}
+        {showModal && <Modal onClose={this.togleModal} largeImage={largeImage} />}
       </div>
     );    
   }

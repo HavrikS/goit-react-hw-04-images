@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
+import { IoSearchOutline } from "react-icons/io5";
 import css from 'components/Searchbar/Searchbar.module.css'
 
 class Searchbar extends Component {
@@ -22,14 +24,14 @@ handleSubmit = event => {
 
 render() {     
 return (   
-    <header className={css.Searchbar}>
-    <form className={css.SearchForm} onSubmit={this.handleSubmit}>
-        <button type="submit" className={css.SearchFormButton}>
-        <span className={css.SearchFormButtonLabel}>Search</span>
+    <header className={css.searchbar}>
+    <form className={css.searchForm} onSubmit={this.handleSubmit}>
+        <button type="submit" className={css.searchFormButton}>
+                <span className={css.searchFormButtonLabel}><IoSearchOutline className={css.searchLabel}/></span>
         </button>
 
         <input
-        className={css.SearchFormInput}
+        className={css.searchFormInput}
         type="text"
         name="searchName"
         autoComplete="off"
@@ -46,3 +48,7 @@ return (
 
 
 export default Searchbar;
+
+Searchbar.propTypes = {
+    onSubmit: PropTypes.func.isRequired
+}
