@@ -4,6 +4,12 @@ import css from 'components/Modal/Modal.module.css'
 
 
 class Modal extends Component {
+    
+    static propTypes = {
+    onClose: PropTypes.func.isRequired,
+    largeImage: PropTypes.string.isRequired
+}
+   
   
     componentDidMount() {
             window.addEventListener('keydown', this.handleKeyDown)
@@ -29,12 +35,12 @@ class Modal extends Component {
 
     render() {     
 
-        
+        const {largeImage} = this.props
 
         return (      
         <div className={css.overlay} onClick={this.handleBackdropClick}>
                 <div >
-                <img className={css.modal} src={this.props.largeImage} alt="" />    
+                <img className={css.modal} src={largeImage} alt="" />    
             </div>
         </div>
         );
@@ -43,8 +49,3 @@ class Modal extends Component {
 
 export default Modal;
 
-
-Modal.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    largeImage: PropTypes.string.isRequired
-}
