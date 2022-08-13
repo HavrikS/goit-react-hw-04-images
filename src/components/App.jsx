@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from "axios";
+// import axios from "axios";
 import Modal from 'components/Modal/Modal'
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery'
@@ -19,22 +19,22 @@ export default function App() {
   const [loading, setLoading] = useState(false);  
   
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`https://pixabay.com/api/?q=${searchName}&page=${pageNumber}&key=28062260-bbfec586ef8cfde1ee2834ccc&image_type=photo&orientation=horizontal&per_page=12`);      
-      setPictures([...pictures, ...response.data.hits]);
-      setLoading(false)
-    }
-    catch (error) {
-      console.error(error);
-    }
-  }
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get(`https://pixabay.com/api/?q=${searchName}&page=${pageNumber}&key=28062260-bbfec586ef8cfde1ee2834ccc&image_type=photo&orientation=horizontal&per_page=12`);      
+  //     setPictures([...pictures, ...response.data.hits]);
+  //     setLoading(false)
+  //   }
+  //   catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   useEffect(() => {    
     if (searchName === '') {
       return
     }
-      fetchData()
+      // fetchData()
   }, [pageNumber, searchName]);
 
 
