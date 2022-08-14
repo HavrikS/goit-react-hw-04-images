@@ -1,5 +1,5 @@
 import  { useEffect } from 'react'
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import css from 'components/Modal/Modal.module.css'
 
 
@@ -33,8 +33,7 @@ const Modal = ({largeImage, onClose}) => {
 export default Modal;
 
 
-    
-//     static propTypes = {
-//     onClose: PropTypes.func.isRequired,
-//     largeImage: PropTypes.string.isRequired
-// }
+Modal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    largeImage: PropTypes.string.isRequired
+}

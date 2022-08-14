@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Modal from 'components/Modal/Modal'
 import fetchData from '../services/pictures-api'
-import Searchbar from 'components/Searchbar/Searchbar';
+import { Searchbar } from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery'
 import Button from 'components/Button/Button'
 import Loader from 'components/Loader/Loader'
@@ -9,7 +9,7 @@ import css from 'components/App.module.css'
 
 
 
-export default function App() {
+export function App() {
   
   const [pictures, setPictures] = useState([]);
   const [largeImage, setLargeImage] = useState('');
@@ -19,21 +19,27 @@ export default function App() {
   const [loading, setLoading] = useState(false);  
   
 
-    async function getPictures() {
+  const getPictures = useCallback ( async () => {  
     const responseData = await fetchData(searchName, pageNumber);
-      setPictures([...pictures, ...responseData.data.hits]);
+    const newPictures = responseData.data.hits.map(picture => 
+    ({
+      id: picture.id,
+      webformatURL: picture.webformatURL,
+      largeImageURL: picture.largeImageURL,
+    })
+    )
+      setPictures([...pictures, ...newPictures]);
       setLoading(false)
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber, searchName])
 
 
   useEffect(() => {    
     if (searchName === '') {
       return
     }
-    getPictures();  
-  
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber, searchName]);
+    getPictures();    
+  }, [getPictures, pageNumber, searchName]);
 
 
 

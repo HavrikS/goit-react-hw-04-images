@@ -1,16 +1,18 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import PropTypes from 'prop-types';
 import { IoSearchOutline } from "react-icons/io5";
 import css from 'components/Searchbar/Searchbar.module.css'
 
-export default function Searchbar({onSubmit}) {
+
+export function Searchbar({onSubmit}) {
 
 const [searchName, setSearchName] = useState('');
 
+const inputEl = useRef(null);
 
-    const handleChange = event => {
-        setSearchName(event.target.value);
-    }
+const handleChange = () => {
+    setSearchName(inputEl.current.value);
+}
 
 const handleSubmit = event => {
     event.preventDefault();    
@@ -33,6 +35,7 @@ return (
         autoFocus
         placeholder="Search images and photos"
         value={searchName}
+        ref={inputEl}
         onChange={handleChange}
         />
     </form>
