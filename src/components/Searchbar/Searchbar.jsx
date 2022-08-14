@@ -1,31 +1,26 @@
-import React, { Component } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types';
 import { IoSearchOutline } from "react-icons/io5";
 import css from 'components/Searchbar/Searchbar.module.css'
 
-class Searchbar extends Component {
+export default function Searchbar({onSubmit}) {
 
-state = {    
-    searchName: ''    
-};
+const [searchName, setSearchName] = useState('');
 
-handleChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-        [name]: value
-    });
-};
 
-handleSubmit = event => {
+    const handleChange = event => {
+        setSearchName(event.target.value);
+    }
+
+const handleSubmit = event => {
     event.preventDefault();    
-    this.props.onSubmit(this.state)
+    onSubmit(searchName)    
 };
 
 
-render() {     
 return (   
     <header className={css.searchbar}>
-    <form className={css.searchForm} onSubmit={this.handleSubmit}>
+    <form className={css.searchForm} onSubmit={handleSubmit}>
         <button type="submit" className={css.searchFormButton}>
                 <span className={css.searchFormButtonLabel}><IoSearchOutline className={css.searchLabel}/></span>
         </button>
@@ -37,17 +32,15 @@ return (
         autoComplete="off"
         autoFocus
         placeholder="Search images and photos"
-        value={this.state.searchName}
-        onChange={this.handleChange}
+        value={searchName}
+        onChange={handleChange}
         />
     </form>
     </header>       
 );
 }
-}
 
 
-export default Searchbar;
 
 Searchbar.propTypes = {
     onSubmit: PropTypes.func.isRequired

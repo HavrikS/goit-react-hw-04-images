@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-// import axios from "axios";
 import Modal from 'components/Modal/Modal'
+import fetchData from '../services/pictures-api'
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery'
 import Button from 'components/Button/Button'
@@ -19,22 +19,20 @@ export default function App() {
   const [loading, setLoading] = useState(false);  
   
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await axios.get(`https://pixabay.com/api/?q=${searchName}&page=${pageNumber}&key=28062260-bbfec586ef8cfde1ee2834ccc&image_type=photo&orientation=horizontal&per_page=12`);      
-  //     setPictures([...pictures, ...response.data.hits]);
-  //     setLoading(false)
-  //   }
-  //   catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+    async function getPictures() {
+    const responseData = await fetchData(searchName, pageNumber);
+      setPictures([...pictures, ...responseData.data.hits]);
+      setLoading(false)
+  }
+
 
   useEffect(() => {    
     if (searchName === '') {
       return
     }
-      // fetchData()
+    getPictures();  
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, searchName]);
 
 
@@ -50,7 +48,7 @@ export default function App() {
     setLargeImage(largeImageURL);
   }
 
-  const formSubmitHendler = ({ searchName }) => { 
+  const formSubmitHendler = (searchName) => { 
     setSearchName(searchName);
     setPictures([]);
     setPageNumber(1);
@@ -59,18 +57,18 @@ export default function App() {
   
 
   const togleModal = () => {
-    setShowModal( !showModal )
-  }
+    setShowModal(!showModal)
+  };
 
 
   
   return (
     <div className={css.container}>
-      <Searchbar onSubmit={formSubmitHendler} />
+      <Searchbar onSubmit = {formSubmitHendler} />
       {loading && <Loader/>}
       {(pictures.length > 0) && <ImageGallery pictures={pictures} onClick={togleModal} onImageClick={onImageHendler} />}
       {(pictures.length > 0) && <Button onClick={onLoadMoreHendler} />}
-      {showModal && <Modal onClose={togleModal} largeImage={largeImage} />}
+      {showModal && <Modal onClose= {togleModal} largeImage={largeImage} />}
     </div>
   );    
 }
